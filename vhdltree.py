@@ -12,7 +12,7 @@ def _vhdltree(level, filepath, pattern, vhd_files):
     included_entities = find_entities(filepath, pattern)
     if included_entities:
         for entity, name in included_entities.iteritems():
-            path = vhd_files.get(name)            
+            path = vhd_files.get(name.lower())
             if path:
                 print "    "*level + entity + " : " + path
                 _vhdltree(level+1, path, pattern, vhd_files)
@@ -43,12 +43,12 @@ def find_vhd(proot):
                 ext = l[-1]
                 if ext.lower() == "vhd":
                     basename = l[-2]
-                    vhd_files[basename] = dirpath + '/' + n
+                    vhd_files[basename.lower()] = dirpath + '/' + n
     return vhd_files
 
 
 def vhdltree(filepath, proot):
-    p = re.compile("\s*([^\s:]+)\s*:\s*entity\s*([^\s]+)\s*")
+    p = re.compile("\s*([^\s:]+)\s*:\s*entity\s*([^\s]+)\s*", re.IGNORECASE)
     vhd_files = find_vhd(proot)
     _vhdltree(0, filepath, p, vhd_files)
 
