@@ -48,7 +48,7 @@ def find_vhd(proot):
 
 
 def vhdltree(filepath, proot):
-    p = re.compile("\s*([^\s:]+)\s*:\s*entity\s*([^\s]+)\s*", re.IGNORECASE)
+    p = re.compile("\s*([^\s:]+)\s*:\s*entity\s*([^\s]+)", re.IGNORECASE)
     vhd_files = find_vhd(proot)
     _vhdltree(0, filepath, p, vhd_files)
 
