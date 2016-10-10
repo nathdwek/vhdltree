@@ -1,5 +1,5 @@
 # What this does:
-First argument is the main file, second is the project root
+First argument is the main file, second one is the project root.
 
 `./vhdltree.py test/main.vhd test/`
 ```
@@ -12,7 +12,7 @@ e1i2 : test//e1.vhd
     e4içàéè_éè_1 : test/lib/deep/e4.vhd
 ```
 
-Yes, the name used in the test are minimal and ugly at the same time to push the regex a minimum.
+*Yes, the names used in the test are minimal because I am lazy and ugly to push the regex a minimum.*
 
 Real project, 156 total instantiated entities (approx. 10 levels deep), 1.6GB project root with 45000 files and directories approx 15 levels deep:
 ```
@@ -25,5 +25,5 @@ sys     0m0.053s
 * The construction of the file list is not that efficient, we still `os.walk` the whole project directory, even though we do it only once.
 * I am not that versed in VHDL syntax, so the regular expression to find entities is really minimal.
 * To find an entity file, we do not respect the library prefix at all. I don't even know how libraries work in VHDL in terms of where the files should be.
-* As a consequence (other than speed) we cannot guarantee that the file examined for an entity is the actual file the compiler will use if there are files with the same basename in different directories. The associations in `vhd_files` depend on the order of `os.walk` and the `EXCLUDES` variable.
+* As a consequence (other than speed) we cannot guarantee that the file examined for an entity is the actual file the compiler will use if there are files with the same basename in different directories. The way `vhd_files` maps basenames to paths depends on the order of `os.walk` and the `EXCLUDES` variable.
 * Case insensitive, spaces agnostic because VHDL
