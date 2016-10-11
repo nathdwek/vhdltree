@@ -12,7 +12,7 @@ EXCLUDES = ["implementation", "testbench"]
 def _vhdltree(level, filepath, pattern, vhd_files):
     included_entities = find_entities(filepath, pattern)
     if included_entities:
-        for entity, name in included_entities.iteritems():
+        for entity, name in included_entities.items():
             path = vhd_files.get(name.lower())
             if path:
                 print("    "*level + entity + " : " + path)
