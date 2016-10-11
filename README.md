@@ -4,11 +4,11 @@ First argument is the main file, second one is the project root.
 `./vhdltree.py test/main.vhd test/`
 ```
 E3i1 : test/lib/E3.vhd
-e2I1 : test//e2.vhd
+e2I1 : test/e2.vhd
     e3i2 : test/lib/E3.vhd
-e1i1 : test//e1.vhd
+e1i1 : test/e1.vhd
     e4içàéè_éè_1 : test/lib/deep/e4.vhd
-e1i2 : test//e1.vhd
+e1i2 : test/e1.vhd
     e4içàéè_éè_1 : test/lib/deep/e4.vhd
 ```
 
