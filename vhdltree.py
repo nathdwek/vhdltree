@@ -3,6 +3,7 @@
 import re
 from sys import argv
 from os import walk
+from os.path import join as pjoin
 
 
 EXCLUDES = ["implementation", "testbench"]
@@ -43,7 +44,7 @@ def find_vhd(proot):
                 ext = l[-1]
                 if ext.lower() == "vhd":
                     basename = l[-2]
-                    vhd_files[basename.lower()] = dirpath + '/' + n
+                    vhd_files[basename.lower()] = pjoin(dirpath, n)
     return vhd_files
 
 
