@@ -7,6 +7,7 @@ from os.path import join as pjoin
 
 
 EXCLUDES = ["implementation", "testbench"]
+BASIC_ID_REGEX = "[a-z][a-z0-9]*(?:_[a-z0-9]+)*"
 
 
 def _vhdltree(level, filepath, pattern, vhd_files):
@@ -49,7 +50,9 @@ def find_vhd(proot):
 
 
 def vhdltree(filepath, proot):
-    p = re.compile("\s*([^\s:]+)\s*:\s*entity\s*([^\s]+)", re.IGNORECASE)
+    instantiation_regex = ("\s*({0})\s*:\s*entity\s*({0}(?:\.{0})*)"
+                           .format(BASIC_ID_REGEX))
+    p = re.compile(instantiation_regex, re.IGNORECASE)
     vhd_files = find_vhd(proot)
     _vhdltree(0, filepath, p, vhd_files)
 
