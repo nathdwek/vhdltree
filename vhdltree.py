@@ -36,11 +36,7 @@ def find_entities(filepath, pattern):
 def find_vhd(proot):
     vhd_files = {}
     for (dirpath, dirnames, filenames) in walk(proot):
-        i, excluded = 0, False
-        while i < len(EXCLUDES) and not excluded:
-            excluded = EXCLUDES[i] in dirpath.lower()
-            i += 1
-        if not excluded:
+        if not isexcluded(dirpath.lower()):
             for n in filenames:
                 l = n.split(".")
                 ext = l[-1]
@@ -48,6 +44,13 @@ def find_vhd(proot):
                     basename = l[-2]
                     vhd_files[basename.lower()] = pjoin(dirpath, n)
     return vhd_files
+
+
+def isexcluded(path):
+    for excluder in EXCLUDES:
+        if excluder in path:
+            return True
+    return False
 
 
 def vhdltree(filepath, proot):
