@@ -28,7 +28,8 @@ def find_entities(filepath, pattern):
         for l in f:
             m = pattern.match(l)
             if m:
-                included_entities[m.group(1)] = m.group(2).split(".")[-1]
+                included_entities[m.group('entity')] = (m.group('component')
+                                                        .split(".")[-1])
     return included_entities
 
 
@@ -50,7 +51,7 @@ def find_vhd(proot):
 
 
 def vhdltree(filepath, proot):
-    instantiation_regex = ("\s*({0})\s*:\s*entity\s*({0}(?:\.{0})*)"
+    instantiation_regex = ("\s*(?P<entity>{0})\s*:\s*entity\s*(?P<component>{0}(?:\.{0})*)"  # NOQA
                            .format(BASIC_ID_REGEX))
     p = re.compile(instantiation_regex, re.IGNORECASE)
     vhd_files = find_vhd(proot)
