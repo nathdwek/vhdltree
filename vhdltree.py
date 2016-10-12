@@ -14,12 +14,10 @@ def _vhdltree(level, filepath, pattern, vhd_files):
     included_entities = find_entities(filepath, pattern)
     if included_entities:
         for entity, component in included_entities.items():
-            path = vhd_files.get(component.lower())
-            if path:
-                print("    "*level + entity + " : " + path)
+            path = vhd_files.get(component.lower(), "Not Found")
+            print("    "*level + entity + " : " + path)
+            if path != "Not Found":
                 _vhdltree(level+1, path, pattern, vhd_files)
-            else:
-                print("    "*level + entity + " : Not Found")
 
 
 def find_entities(filepath, pattern):

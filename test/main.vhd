@@ -8,3 +8,4 @@ goodid1: entity .badcomponent
 truncate_before_dot: entity e4.
 bad_id_é"'(-è_ç)'": entity component
 the: entity E_1
+not_found: entity not_in_directory
