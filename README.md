@@ -23,7 +23,7 @@ sys     0m0.053s
 
 # Caveats:
 * The construction of the file list is not that efficient, we still `os.walk` the whole project directory, even though we do it only once.
-* I am not that versed in VHDL syntax, so the regular expression to find entities is really minimal.
+* Does not match VHDL extended identifiers. The regex can be made extremely bare to match basically anything (see < e443187)
 * To find an entity file, we do not respect the library prefix at all. I don't even know how libraries work in VHDL in terms of where the files should be.
 * As a consequence (other than speed) we cannot guarantee that the file examined for an entity is the actual file the compiler will use if there are files with the same basename in different directories. The way `vhd_files` maps basenames to paths depends on the order of `os.walk` and the `EXCLUDES` variable.
 * Case insensitive, spaces agnostic because VHDL.
