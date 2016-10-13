@@ -35,12 +35,8 @@ def find_vhd(proot):
     vhd_files = {}
     for (dirpath, dirnames, filenames) in walk(proot):
         if not isexcluded(dirpath.lower()):
-            for n in filenames:
-                l = n.split(".")
-                ext = l[-1]
-                if ext.lower() == "vhd":
-                    basename = l[-2]
-                    vhd_files[basename.lower()] = pjoin(dirpath, n)
+            for fn in filter(lambda fn: fn[-4:].lower() == ".vhd", filenames):
+                vhd_files[fn[:-4].lower()] = pjoin(dirpath, fn)
     return vhd_files
 
 
