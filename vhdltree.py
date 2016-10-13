@@ -11,47 +11,34 @@ BASIC_ID_REGEX = "[a-z][a-z0-9]*(?:_[a-z0-9]+)*"
 
 
 def _vhdltree(level, filepath, pattern, vhd_files):
-    included_entities = find_entities(filepath, pattern)
-    if included_entities:
-        for entity, component in included_entities.items():
-            path = vhd_files.get(component.lower(), "Not Found")
-            print("    "*level + entity + " : " + path)
-            if path != "Not Found":
-                _vhdltree(level+1, path, pattern, vhd_files)
+    for entity, component in find_entities(filepath, pattern):
+        path = vhd_files.get(component.lower(), "Not Found")
+        print("    "*level + entity + " : " + path)
+        if path != "Not Found":
+            _vhdltree(level+1, path, pattern, vhd_files)
 
 
 def find_entities(filepath, pattern):
-    included_entities = {}
     with open(filepath) as f:
         for l in f:
             m = pattern.match(l)
             if m:
-                included_entities[m.group('entity')] = (m.group('component')
-                                                        .split(".")[-1])
-    return included_entities
+                yield m.group('entity'), m.group('component').split(".")[-1]
 
 
 def find_vhd(proot):
-    vhd_files = {}
     for (dirpath, dirnames, filenames) in walk(proot):
-        if not isexcluded(dirpath.lower()):
-            for fn in filter(lambda fn: fn[-4:].lower() == ".vhd", filenames):
-                vhd_files[fn[:-4].lower()] = pjoin(dirpath, fn)
-    return vhd_files
-
-
-def isexcluded(path):
-    for excluder in EXCLUDES:
-        if excluder in path:
-            return True
-    return False
+        if all(excluder not in dirpath.lower() for excluder in EXCLUDES):
+            for fn in filenames:
+                if fn[-4:].lower() == ".vhd":
+                    yield fn[:-4].lower(), pjoin(dirpath, fn)
 
 
 def vhdltree(filepath, proot):
     instantiation_regex = ("\s*(?P<entity>{0})\s*:\s*entity\s*(?P<component>{0}(?:\.{0})*)"  # NOQA
                            .format(BASIC_ID_REGEX))
     p = re.compile(instantiation_regex, re.IGNORECASE)
-    vhd_files = find_vhd(proot)
+    vhd_files = dict(find_vhd(proot))
     _vhdltree(0, filepath, p, vhd_files)
 
 if __name__ == "__main__":
