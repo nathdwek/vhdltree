@@ -5,18 +5,18 @@ First argument is the main file, second one is the project root.
 ```
 e1i1 : test/long_component_name5678.vhd
     long_ent17y_n4m3_with_numbers4567 : test/lib/deep/e4.vhd
-E3_i1 : test/lib/E3.vhd
+e1i2 : test/long_component_name5678.vhd
+    long_ent17y_n4m3_with_numbers4567 : test/lib/deep/e4.vhd
 e2I1 : test/e2.vhd
-    bad_prefix : test/lib/E3.vhd
-    check_recurse : test/lib/E3.vhd
     NO_PREFIX : test/lib/E3.vhd
+    bad_prefix : test/lib/E3.vhd
+E3_i1 : test/lib/E3.vhd
 truncate_before_dot : test/lib/deep/e4.vhd
 the : test/e_1.vhd
     chain : test/lib/e5.vhd
         goes : test/lib/deep/e6.vhd
             on : test/e7.vhd
-e1i2 : test/long_component_name5678.vhd
-    long_ent17y_n4m3_with_numbers4567 : test/lib/deep/e4.vhd
+not_found : Not Found
 ```
 
 *Yes, the names used in the test are minimal because I am lazy and ugly to push the regex a minimum.*
