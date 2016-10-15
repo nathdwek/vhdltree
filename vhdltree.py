@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+from __future__ import print_function
+
 import re
 import os
 import os.path
@@ -15,7 +17,7 @@ def _vhdltree(level, filepath, pattern, vhd_files):
         try:
             path = vhd_files[component.lower()]
         except KeyError:
-            yield level, entity, "Not found"
+            yield level, entity, ''
         else:
             yield level, entity, path
             for l, e, p in _vhdltree(level+1, path, pattern, vhd_files):
@@ -46,7 +48,8 @@ def vhdltree(filepath, proot):
     p = re.compile(instantiation_regex, re.IGNORECASE)
     vhd_files = dict(find_vhd(proot))
     for level, entity, path in _vhdltree(0, filepath, p, vhd_files):
-        print("    "*level + entity + " : " + path)
+        print(' '*4*level, entity, ' : ', path or 'Not found')
+
 
 if __name__ == '__main__':
     vhdltree(argv[1], argv[2])
