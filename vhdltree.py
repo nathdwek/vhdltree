@@ -28,12 +28,15 @@ def find_entities(lines, pattern):
             yield m.group('entity'), m.group('component').split(".")[-1]
 
 
-def find_vhd(proot):
-    for (dirpath, _, filenames) in os.walk(proot):
-        if all(excluder not in dirpath.lower() for excluder in EXCLUDES):
-            for fn in filenames:
-                if fn[-4:].lower() == ".vhd":
-                    yield fn[:-4].lower(), os.path.join(dirpath, fn)
+def find_vhd(directory):
+    for entry in os.listdir(directory):
+        entrypath = os.path.join(directory, entry)
+        if os.path.isfile(entrypath) and entry[-4:].lower() == ".vhd":
+                yield entry[:-4].lower(), entrypath
+        elif os.path.isdir(entrypath):
+            if all(excluder not in entry.lower() for excluder in EXCLUDES):
+                for component, path in find_vhd(entrypath):
+                    yield component, path
 
 
 def vhdltree(filepath, proot):
