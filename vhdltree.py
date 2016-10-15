@@ -1,10 +1,9 @@
 #!/usr/bin/env python
 
 import re
+import os
+import os.path
 from sys import argv
-from os import walk
-from os.path import join as pjoin
-
 
 EXCLUDES = ["implementation", "testbench"]
 BASIC_ID_REGEX = "[a-z][a-z0-9]*(?:_[a-z0-9]+)*"
@@ -27,11 +26,11 @@ def find_entities(filepath, pattern):
 
 
 def find_vhd(proot):
-    for (dirpath, dirnames, filenames) in walk(proot):
+    for (dirpath, _, filenames) in os.walk(proot):
         if all(excluder not in dirpath.lower() for excluder in EXCLUDES):
             for fn in filenames:
                 if fn[-4:].lower() == ".vhd":
-                    yield fn[:-4].lower(), pjoin(dirpath, fn)
+                    yield fn[:-4].lower(), os.path.join(dirpath, fn)
 
 
 def vhdltree(filepath, proot):
