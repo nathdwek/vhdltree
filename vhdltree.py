@@ -10,19 +10,22 @@ BASIC_ID_REGEX = "[a-z][a-z0-9]*(?:_[a-z0-9]+)*"
 
 
 def _vhdltree(level, filepath, pattern, vhd_files):
-    for entity, component in find_entities(filepath, pattern):
-        path = vhd_files.get(component.lower(), "Not Found")
-        print("    "*level + entity + " : " + path)
-        if path != "Not Found":
-            _vhdltree(level+1, path, pattern, vhd_files)
+    for entity, component in find_entities(open(filepath), pattern):
+        try:
+            path = vhd_files[component.lower()]
+        except KeyError:
+            yield level, entity, "Not found"
+        else:
+            yield level, entity, path
+            for l, e, p in _vhdltree(level+1, path, pattern, vhd_files):
+                yield l, e, p
 
 
-def find_entities(filepath, pattern):
-    with open(filepath) as f:
-        for l in f:
-            m = pattern.match(l)
-            if m:
-                yield m.group('entity'), m.group('component').split(".")[-1]
+def find_entities(lines, pattern):
+    for l in lines:
+        m = pattern.match(l)
+        if m:
+            yield m.group('entity'), m.group('component').split(".")[-1]
 
 
 def find_vhd(proot):
@@ -38,7 +41,8 @@ def vhdltree(filepath, proot):
                            .format(BASIC_ID_REGEX))
     p = re.compile(instantiation_regex, re.IGNORECASE)
     vhd_files = dict(find_vhd(proot))
-    _vhdltree(0, filepath, p, vhd_files)
+    for level, entity, path in _vhdltree(0, filepath, p, vhd_files):
+        print("    "*level + entity + " : " + path)
 
 if __name__ == "__main__":
     vhdltree(argv[1], argv[2])
