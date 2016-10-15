@@ -48,7 +48,9 @@ def vhdltree(filepath, proot):
     p = re.compile(instantiation_regex, re.IGNORECASE)
     vhd_files = dict(find_vhd(proot))
     for level, entity, path in _vhdltree(0, filepath, p, vhd_files):
-        print(' '*4*level, entity, ' : ', path or 'Not found')
+        print('{indent}{entity} : {path}'.format(indent=4*' '*level,
+                                                 entity=entity,
+                                                 path=path or 'Not found'))
 
 
 if __name__ == '__main__':
