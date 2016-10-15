@@ -9,7 +9,11 @@ from sys import argv
 
 
 EXCLUDES = ['implementation', 'testbench']
-BASIC_ID_REGEX = '[a-z][a-z0-9]*(?:_[a-z0-9]+)*'
+BASIC_ID_REGEX = (
+    r'[a-z]'            # a basic identifier starts with an alphabetic char
+    r'[a-z0-9]*'        # it can contain alphanumerics
+    r'(?:_[a-z0-9]+)*'  # and '_' but not at the end
+)
 
 
 def _vhdltree(level, filepath, pattern, vhd_files):
@@ -43,8 +47,16 @@ def find_vhd(directory):
 
 
 def vhdltree(filepath, proot):
-    instantiation_regex = ('\s*(?P<entity>{0})\s*:\s*entity\s*(?P<component>{0}(?:\.{0})*)'  # NOQA
-                           .format(BASIC_ID_REGEX))
+    instantiation_regex = (
+        r'\s*'               # indentation
+        r'(?P<entity>{0})'   # single basic identifier
+        r'\s*:\s*entity\s*'  # entity declaration and spacing
+        r'(?P<component>'    # component:
+           r'{0}'            # at least a basic identifier
+           r'(?:\.{0})*'     # for libraries: dots can only appear if they are followed by another basic identifier # NOQA
+        r')'
+        .format(BASIC_ID_REGEX)
+)
     p = re.compile(instantiation_regex, re.IGNORECASE)
     vhd_files = dict(find_vhd(proot))
     for level, entity, path in _vhdltree(0, filepath, p, vhd_files):
