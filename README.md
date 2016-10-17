@@ -23,9 +23,9 @@ not_found : Not Found
 
 Real project, 156 total instantiated entities (approx. 10 levels deep), 1.6GB project root with 45000 files and directories approx 15 levels deep:
 ```
-real    0m0.219s
-user    0m0.165s
-sys     0m0.053s
+real    0m0.149s
+user    0m0.123s
+sys     0m0.025s
 ```
 
 # Caveats:
