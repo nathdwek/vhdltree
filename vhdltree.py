@@ -4,8 +4,7 @@ from __future__ import print_function
 
 import re
 import os
-import os.path
-from sys import argv
+import argparse
 
 
 EXCLUDES = ['implementation', 'testbench']
@@ -24,7 +23,7 @@ def _vhdltree(level, filepath, pattern, vhd_files):
             yield level, entity, ''
         else:
             yield level, entity, path
-            for l, e, p in _vhdltree(level+1, path, pattern, vhd_files):
+            for l, e, p in _vhdltree(level + 1, path, pattern, vhd_files):
                 yield l, e, p
 
 
@@ -52,18 +51,30 @@ def vhdltree(filepath, proot):
         r'(?P<entity>{0})'   # single basic identifier
         r'\s*:\s*entity\s*'  # entity declaration and spacing
         r'(?P<component>'    # component:
-           r'{0}'            # at least a basic identifier
-           r'(?:\.{0})*'     # for libraries: dots can only appear if they are followed by another basic identifier # NOQA
+            r'{0}'            # at least a basic identifier # noqa E131
+            r'(?:\.{0})*'     # for libraries: dots can only appear if they are followed by another basic identifier
         r')'
         .format(BASIC_ID_REGEX)
-)
+    )
     p = re.compile(instantiation_regex, re.IGNORECASE)
     vhd_files = dict(find_vhd(proot))
     for level, entity, path in _vhdltree(0, filepath, p, vhd_files):
-        print('{indent}{entity} : {path}'.format(indent=4*' '*level,
+        print('{indent}{entity} : {path}'.format(indent=4 * ' ' * level,
                                                  entity=entity,
                                                  path=path or 'Not found'))
 
 
+def parse_args():
+    parser = argparse.ArgumentParser(description='A minimal tool to print'
+                                     'the entity tree of a VHDL project',
+                                     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser.add_argument('main', help='The main vhdl file')
+    parser.add_argument('--project', '-p',
+                        help='The project root directory',
+                        default='./')
+    args = parser.parse_args()
+    return args.main, args.project
+
 if __name__ == '__main__':
-    vhdltree(argv[1], argv[2])
+    vhd_main, proot = parse_args()
+    vhdltree(vhd_main, proot)
