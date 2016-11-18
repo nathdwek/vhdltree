@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 from __future__ import print_function
 
@@ -23,8 +23,7 @@ def _vhdltree(level, filepath, pattern, vhd_files):
             yield level, entity, ''
         else:
             yield level, entity, path
-            for l, e, p in _vhdltree(level + 1, path, pattern, vhd_files):
-                yield l, e, p
+            yield from _vhdltree(level + 1, path, pattern, vhd_files)
 
 
 def find_entities(lines, pattern):
@@ -41,8 +40,7 @@ def find_vhd(directory):
                 yield entry[:-4].lower(), entrypath
         elif os.path.isdir(entrypath):
             if all(excluder not in entry.lower() for excluder in EXCLUDES):
-                for component, path in find_vhd(entrypath):
-                    yield component, path
+                yield from find_vhd(entrypath)
 
 
 def vhdltree(filepath, proot):
@@ -74,6 +72,7 @@ def parse_args():
                         default='./')
     args = parser.parse_args()
     return args.main, args.project
+
 
 if __name__ == '__main__':
     vhd_main, proot = parse_args()
