@@ -43,8 +43,10 @@ def find_entities(lines):
 def find_vhd(directory):
     for entry in os.listdir(directory):
         entrypath = os.path.join(directory, entry)
-        if os.path.isfile(entrypath) and entry[-4:].lower() == '.vhd':
-                yield entry[:-4].lower(), entrypath
+        if os.path.isfile(entrypath):
+            basename, *ext = entry.lower().rsplit('.', 1)
+            if ext == ['vhd'] and basename:
+                yield basename, entrypath
         elif os.path.isdir(entrypath):
             if all(excluder not in entry.lower() for excluder in EXCLUDES):
                 yield from find_vhd(entrypath)
