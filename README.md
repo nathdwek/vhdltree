@@ -1,27 +1,28 @@
-# What this does:
-First argument is the main file, second one is the project root.
+# Usage:
+`vhdltree [-p,--project PROJECT_ROOT] MAIN_VHD`
 
-`./vhdltree.py test/main.vhd test/`
+# With Provided Test Project:
+`$ vhdltree test/dummy_project/main.vhd -p test/dummy_project`
 ```
-e1i1 : test/long_component_name5678.vhd
-    long_ent17y_n4m3_with_numbers4567 : test/lib/deep/e4.vhd
-e1i2 : test/long_component_name5678.vhd
-    long_ent17y_n4m3_with_numbers4567 : test/lib/deep/e4.vhd
-e2I1 : test/e2.vhd
-    NO_PREFIX : test/lib/E3.vhd
-    bad_prefix : test/lib/E3.vhd
-E3_i1 : test/lib/E3.vhd
-truncate_before_dot : test/lib/deep/e4.vhd
-the : test/e_1.vhd
-    chain : test/lib/e5.vhd
-        goes : test/lib/deep/e6.vhd
-            on : test/e7.vhd
-not_found : Not Found
+e1i1 : ./long_component_name5678.vhd
+    long_ent17y_n4m3_with_numbers4567 : ./lib/deep/e4.vhd
+e1i2 : ./long_component_name5678.vhd
+    long_ent17y_n4m3_with_numbers4567 : ./lib/deep/e4.vhd
+e2I1 : ./e2.vhd
+    NO_PREFIX : ./lib/E3.vhd
+    bad_prefix : ./lib/E3.vhd
+E3_i1 : ./lib/E3.vhd
+truncate_before_dot : ./lib/deep/e4.vhd
+the : ./e_1.vhd
+    chain : ./lib/e5.vhd
+        goes : ./lib/deep/e6.vhd
+            on : ./e7.vhd
+not_found : Not found
 ```
 
 *Yes, the names used in the test are minimal because I am lazy and ugly to push the regex a minimum.*
 
-Real project, 156 total instantiated entities (approx. 10 levels deep), 1.6GB project root with 45000 files and directories approx 15 levels deep:
+Real project, 156 total instantiated entities (approx. 10 levels deep), 1.6GB project root with 45000 files and directories approx. 15 levels deep:
 ```
 real    0m0.149s
 user    0m0.123s
