@@ -29,7 +29,8 @@ sys     0m0.025s
 ```
 
 # Caveats:
-* As of [e443187](https://github.com/nathdwek/vhdltree/commit/e443187c79cf45b9bcbb49cdf3527d8df034ba2b): does not match VHDL extended identifiers. The regex can be changed back to extremely bare in order to match more exotic identifiers.
+* As of [a360c80](https://github.com/nathdwek/vhdltree/commit/a360c80ef496e0f71a81545485b1524ceee8b0d6): Python >= 3.5 required.
+* As of [e443187](https://github.com/nathdwek/vhdltree/commit/e443187c79cf45b9bcbb49cdf3527d8df034ba2b): Does not match VHDL extended identifiers. The regex can be changed back to extremely bare in order to match more exotic identifiers.
 * To find an entity file, we do not respect the library prefix at all. I don't even know how libraries work in VHDL in terms of where the files should be.
 * As a consequence (other than speed) we cannot guarantee that the file examined for an entity is the actual file the compiler will use if there are files with the same basename in different directories. The way `vhd_files` maps basenames to paths depends on their "tree" order and the `EXCLUDES` variable.
 * Case insensitive, spaces agnostic because VHDL.
