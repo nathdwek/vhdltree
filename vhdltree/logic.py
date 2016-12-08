@@ -40,20 +40,20 @@ def find_entities(lines):
             yield m.group('entity'), m.group('component').split('.')[-1]
 
 
-def find_vhd(directory):
+def find_ext(directory, ext):
     for entry in os.listdir(directory):
         entrypath = os.path.join(directory, entry)
         if os.path.isfile(entrypath):
-            basename, *ext = entry.lower().rsplit('.', 1)
-            if ext == ['vhd'] and basename:
+            basename, *entry_ext = entry.lower().rsplit('.', 1)
+            if entry_ext == [ext] and basename:
                 yield basename, entrypath
         elif os.path.isdir(entrypath):
             if all(excluder not in entry.lower() for excluder in EXCLUDES):
-                yield from find_vhd(entrypath)
+                yield from find_ext(entrypath, ext)
 
 
 def vhdltree(filepath, proot):
-    vhd_files = dict(find_vhd(proot))
+    vhd_files = dict(find_ext(proot, 'vhd'))
     for level, entity, path in _vhdltree(0, filepath, vhd_files):
         print('{indent}{entity} : {path}'.format(
             indent=4 * ' ' * level,

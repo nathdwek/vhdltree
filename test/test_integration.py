@@ -1,7 +1,7 @@
 import os
 import pytest
 
-from vhdltree.logic import find_vhd, _vhdltree, vhdltree
+from vhdltree.logic import find_ext, _vhdltree, vhdltree
 
 
 @pytest.fixture()
@@ -13,7 +13,7 @@ def cd_proot():
 @pytest.mark.usefixtures("cd_proot")
 class TestIntegration:
     def test_find_vhd(self):
-        assert dict(find_vhd('./')) == {
+        assert dict(find_ext('./', 'vhd')) == {
             'e2': './e2.vhd',
             'e3': './lib/E3.vhd',
             'e4': './lib/deep/e4.vhd',
