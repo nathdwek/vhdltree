@@ -41,15 +41,19 @@ def find_entities(lines):
 
 
 def find_ext(directory, ext):
-    for entry in os.listdir(directory):
-        entrypath = os.path.join(directory, entry)
-        if os.path.isfile(entrypath):
-            basename, *entry_ext = entry.lower().rsplit('.', 1)
-            if entry_ext == [ext] and basename:
-                yield basename, entrypath
-        elif os.path.isdir(entrypath):
-            if all(excluder not in entry.lower() for excluder in EXCLUDES):
-                yield from find_ext(entrypath, ext)
+    try:
+        entries = os.listdir(directory)
+    except PermissionError as e:
+        print(e)
+    else:
+        for entry in entries:
+            entrypath = os.path.join(directory, entry)
+            if os.path.isfile(entrypath):
+                basename, *entry_ext = entry.lower().rsplit('.', 1)
+                if entry_ext == [ext] and basename:
+                    yield basename, entrypath
+            elif os.path.isdir(entrypath) and all(excluder not in entry.lower() for excluder in EXCLUDES):
+                    yield from find_ext(entrypath, ext)
 
 
 def vhdltree(filepath, proot):
