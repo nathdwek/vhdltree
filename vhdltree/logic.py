@@ -25,12 +25,12 @@ def _vhdltree(level, vhd_path, vhd_files):
     with open(vhd_path) as vhd_file:
         for entity, component in find_entities(vhd_file):
             try:
-                path = vhd_files[component.lower()]
+                component_path = vhd_files[component.lower()]
             except KeyError:
                 yield level, entity, ''
             else:
-                yield level, entity, path
-                yield from _vhdltree(level + 1, path, vhd_files)
+                yield level, entity, component_path
+                yield from _vhdltree(level + 1, component_path, vhd_files)
 
 
 def find_entities(lines):
