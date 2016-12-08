@@ -40,16 +40,19 @@ def find_entities(lines):
             yield m.group('entity'), m.group('component').split('.')[-1]
 
 
-def find_vhd(directory):
-    for entry in os.listdir(directory):
-        entrypath = os.path.join(directory, entry)
-        if os.path.isfile(entrypath):
-            basename, *ext = entry.lower().rsplit('.', 1)
-            if ext == ['vhd'] and basename:
-                yield basename, entrypath
-        elif os.path.isdir(entrypath):
-            if all(excluder not in entry.lower() for excluder in EXCLUDES):
-                yield from find_vhd(entrypath)
+def find_vhd(rootdir):
+    stack = [rootdir]
+    while stack:
+        curdir = stack.pop()
+        for entry in os.listdir(curdir):
+            entrypath = os.path.join(curdir, entry)
+            if os.path.isfile(entrypath):
+                basename, *ext = entry.lower().rsplit('.', 1)
+                if ext == ['vhd'] and basename:
+                    yield basename, entrypath
+            elif os.path.isdir(entrypath):
+                if all(excluder not in entry.lower() for excluder in EXCLUDES):
+                    stack.append(entrypath)
 
 
 def vhdltree(filepath, proot):
